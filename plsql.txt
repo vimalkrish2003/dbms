@@ -1,0 +1,133 @@
+//BASIC//
+DECLARE
+	a integer;
+BEGIN
+	a:=&a;
+	dbms_output.put_line('hello' || a);
+EXCEPTION
+	<exception here>
+END;
+/
+
+//IF THEN// 
+IF(BOOL_EXPRESSION_1)THEN
+	<EXECUTE STATEMENTS>
+ELSEIF(BOOL_EXPRESSION_2)THEN
+	<EXECUTE STATEMENTS>
+ELSE
+	<EXECUTE STATEMENTS FOR ELSE>
+END IF;
+
+//CASE STATEMENTS//
+CASE(SELECTOR)
+	WHEN VALUE1 THEN STATEMENT1;
+	WHEN VALUE2 THEN STATEMENT2;
+	.
+	.
+	.
+	ELSE DEFAULT_STATEMENT;
+END CASE;
+
+//BASIC LOOP//
+DECLARE 
+   x number := 10; 
+BEGIN 
+   LOOP 
+      dbms_output.put_line(x); 
+      x := x + 10; 
+      IF x > 50 THEN 
+         exit; 
+      END IF; 
+   END LOOP; 
+   dbms_output.put_line('After Exit x is: ' || x); 
+END; 
+/
+
+//WHILE LOOP//
+DECLARE 
+   a number(2) := 10; 
+BEGIN 
+   WHILE a < 20 LOOP 
+      dbms_output.put_line('value of a: ' || a); 
+      a := a + 1; 
+   END LOOP; 
+END; 
+/ 
+
+//FOR LOOP//
+DECLARE 
+   a number(2); 
+BEGIN 
+   FOR a in 10 .. 20 LOOP 
+      dbms_output.put_line('value of a: ' || a); 
+  END LOOP; 
+END; 
+/
+
+//PROCEDURE//
+DECLARE 
+   a number; 
+   b number; 
+   c number;
+PROCEDURE findMin(x IN number, y IN number, z OUT number) IS 
+BEGIN 
+   IF x < y THEN 
+      z:= x; 
+   ELSE 
+      z:= y; 
+   END IF; 
+END;   
+BEGIN 
+   a:= 23; 
+   b:= 45; 
+   findMin(a, b, c); 
+   dbms_output.put_line(' Minimum of (23, 45) : ' || c); 
+END; 
+/
+
+//FUNCTION//
+CREATE OR REPLACE FUNCTION totalCustomers 
+RETURN number IS 
+   total number(2) := 0; 
+BEGIN 
+   SELECT count(*) into total 
+   FROM customers; 
+    
+   RETURN total; 
+END; 
+/ 
+
+//TRIGGERS//
+CREATE [OR REPLACE ] TRIGGER trigger_name  
+{BEFORE | AFTER | INSTEAD OF }  
+{INSERT [OR] | UPDATE [OR] | DELETE}  
+[OF col_name]  
+ON table_name  
+[REFERENCING OLD AS o NEW AS n]  
+[FOR EACH ROW]  
+WHEN (condition)   
+DECLARE 
+   Declaration-statements 
+BEGIN  
+   Executable-statements 
+EXCEPTION 
+   Exception-handling-statements 
+END; 
+
+eg :
+CREATE OR REPLACE TRIGGER display_salary_changes 
+BEFORE DELETE OR INSERT OR UPDATE ON customers 
+FOR EACH ROW 
+WHEN (NEW.ID > 0) 
+DECLARE 
+   sal_diff number; 
+BEGIN 
+   sal_diff := :NEW.salary  - :OLD.salary; 
+   dbms_output.put_line('Old salary: ' || :OLD.salary); 
+   dbms_output.put_line('New salary: ' || :NEW.salary); 
+   dbms_output.put_line('Salary difference: ' || sal_diff); 
+END; 
+/ 
+
+
+
